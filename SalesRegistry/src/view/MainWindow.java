@@ -81,9 +81,17 @@ public class MainWindow extends JFrame implements Observer {
 	private JLabel lbRenewed;
 	private JLabel lbDomains;
 	//menu
-	private JMenu fileMenu, toolsMenu, aboutMenu, printSubmenu, previewSubmenu;
+	private JMenu fileMenu, sortMenu, aboutMenu, printSubmenu;
 	private JMenuBar menuBar;
 	private JMenuItem printInvoiceMenu;
+	private JMenuItem printMonthlyReportMenu;
+	private JMenuItem printYearlyReportMenu;
+	private JMenuItem sortCountryMenu;
+	private JMenuItem sortEmailMenu;
+	private JMenuItem sortNameMenu;
+	private JMenuItem sortDateMenu;
+	private JMenuItem sortPriceMenu;
+	private JMenuItem aboutAppMenu;
 	
 	private JList lsDisplay;
 	private DefaultListModel<String> modelList;
@@ -221,19 +229,49 @@ public class MainWindow extends JFrame implements Observer {
 		
 		myPicker.setFieldEditable(false);
 		myPicker.getComponent(0).setFont(new Font("Cambria",Font.PLAIN, 18));
-		//datePanel.setFont(new Font("Cambria",Font.PLAIN, 10));
-		//model.setValue(monthPicker.getModel().getYear());
+		
 		//menu
 		menuBar = new JMenuBar();
 		fileMenu = new JMenu("File");
 		printSubmenu = new JMenu("Print");
+		sortMenu = new JMenu("Sort");
+		aboutMenu = new JMenu("About");
+		
 		printInvoiceMenu = new JMenuItem("Invoice");
-		printInvoiceMenu.setMnemonic(KeyEvent.VK_I);
+		printInvoiceMenu.setMnemonic('I');
+		printMonthlyReportMenu = new JMenuItem("Sales Report for Selected Month");
+		printMonthlyReportMenu.setMnemonic('M');
+		printYearlyReportMenu = new JMenuItem("Sales Report for Selected Year");
+		printYearlyReportMenu.setMnemonic('Y');
+		sortCountryMenu = new JMenuItem("by Country");
+		sortCountryMenu.setMnemonic('C');
+		sortEmailMenu = new JMenuItem("by Email");
+		sortEmailMenu.setMnemonic('E');
+		sortNameMenu = new JMenuItem("by Full Name");
+		sortNameMenu.setMnemonic('N');
+		sortDateMenu = new JMenuItem("by Payment Date");
+		sortDateMenu.setMnemonic('D');
+		sortPriceMenu = new JMenuItem("by Product Price");
+		sortPriceMenu.setMnemonic('P');
+		aboutAppMenu = new JMenuItem("About..");
+		aboutAppMenu.setMnemonic('A');
 		
 		menuBar.add(fileMenu);
+		menuBar.add(sortMenu);
+		menuBar.add(aboutMenu);
+	
 		fileMenu.add(printSubmenu);
 		printSubmenu.add(printInvoiceMenu);
+		printSubmenu.add(printMonthlyReportMenu);
+		printSubmenu.add(printYearlyReportMenu);
 		
+		sortMenu.add(sortCountryMenu);
+		sortMenu.add(sortEmailMenu);
+		sortMenu.add(sortNameMenu);
+		sortMenu.add(sortDateMenu);
+		sortMenu.add(sortPriceMenu);
+		
+		aboutMenu.add(aboutAppMenu);
 		
 		modelList = new DefaultListModel();
 		lsDisplay = new JList(modelList);
@@ -309,13 +347,7 @@ public class MainWindow extends JFrame implements Observer {
 		
 		}
 	
-	private void showDisplayPanel(){
-		
-	}
 	
-	private void showPrintingPanel(){
-		
-	}
 	//set font to all elements
 	public void setUIFont(FontUIResource f) {
         Enumeration<Object> keys = UIManager.getDefaults().keys();
@@ -375,6 +407,17 @@ public class MainWindow extends JFrame implements Observer {
 		btnPrintMonthReport.addActionListener(controller);
 		btnPrintInvoice.addActionListener(controller);
 		btnPrintYearReport.addActionListener(controller);
+		
+		printInvoiceMenu.addActionListener(controller);
+		printMonthlyReportMenu.addActionListener(controller);
+		printYearlyReportMenu.addActionListener(controller);
+		sortCountryMenu.addActionListener(controller);
+		sortEmailMenu.addActionListener(controller);
+		sortNameMenu.addActionListener(controller);
+		sortDateMenu.addActionListener(controller);
+		sortPriceMenu.addActionListener(controller);
+		aboutAppMenu.addActionListener(controller);
+		
 	
 		
 		btnSortId.addActionListener(controller);
@@ -497,6 +540,50 @@ public class MainWindow extends JFrame implements Observer {
 
 	public JButton getBtnReset() {
 		return btnReset;
+	}
+
+	public JMenu getSortMenu() {
+		return sortMenu;
+	}
+
+	public JMenu getPrintSubmenu() {
+		return printSubmenu;
+	}
+
+	public JMenuItem getPrintInvoiceMenu() {
+		return printInvoiceMenu;
+	}
+
+	public JMenuItem getPrintMonthlyReportMenu() {
+		return printMonthlyReportMenu;
+	}
+
+	public JMenuItem getPrintYearlyReportMenu() {
+		return printYearlyReportMenu;
+	}
+
+	public JMenuItem getSortCountryMenu() {
+		return sortCountryMenu;
+	}
+
+	public JMenuItem getSortEmailMenu() {
+		return sortEmailMenu;
+	}
+
+	public JMenuItem getSortNameMenu() {
+		return sortNameMenu;
+	}
+
+	public JMenuItem getSortDateMenu() {
+		return sortDateMenu;
+	}
+
+	public JMenuItem getSortPriceMenu() {
+		return sortPriceMenu;
+	}
+	
+	public JMenuItem getAboutMenu() {
+		return aboutAppMenu;
 	}
 
 	public boolean isSelected()

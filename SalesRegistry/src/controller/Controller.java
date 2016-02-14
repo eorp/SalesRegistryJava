@@ -22,6 +22,7 @@ import java.util.Date;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import view.AboutWindow;
 import view.Countries;
 import view.MainWindow;
 import view.PrintWindow;
@@ -41,6 +42,8 @@ public class Controller implements ActionListener, ChangeListener {
 	private RecordsWindow recordsView;
 	//print window view
 	private PrintWindow dialog;
+	//about window view
+	private AboutWindow aboutDialog;
 	//keep track if edit button is clicked
 	private boolean editBtnClicked = false;
 	//xml file name
@@ -115,7 +118,7 @@ public class Controller implements ActionListener, ChangeListener {
 					model.deleteCustomer(view.getLsDisplay().getSelectedIndex());
 				}
 		}//print monthly report action
-		else if(e.getSource()==view.getBtnPrintMonthReport())
+		else if(e.getSource()==view.getBtnPrintMonthReport() || e.getSource()==view.getPrintMonthlyReportMenu())
 		{
 			 //get info for selected month and year
             String[] main = model.showSelectedSales2(view.getModel().getMonth(),view.getModel().getYear());
@@ -128,7 +131,7 @@ public class Controller implements ActionListener, ChangeListener {
     		showPrintWindow(header,main,total);
 			
 		}//print yearly report action
-		else if(e.getSource()==view.getBtnPrintYearReport())
+		else if(e.getSource()==view.getBtnPrintYearReport() || e.getSource()==view.getPrintYearlyReportMenu())
 		{	 //get info for selected  year
             String[] main = model.showSelectedSales2(-1,view.getModel2().getYear());
             //header
@@ -142,7 +145,7 @@ public class Controller implements ActionListener, ChangeListener {
     		
 		}
 		//print invoice for selected record action
-		else if(e.getSource()==view.getBtnPrintInvoice())
+		else if(e.getSource()==view.getBtnPrintInvoice() || e.getSource()==view.getPrintInvoiceMenu())
 		{//provided a record is selected
 			if(view.isSelected())
 			{
@@ -151,7 +154,7 @@ public class Controller implements ActionListener, ChangeListener {
 	    		showPrintWindow("Invoice",null,model.getInvoice("Company Name\n", "Contact Details", view.getLsDisplay().getSelectedIndex()));
 			}
 		}//sort records by country action
-		else if(e.getSource()==view.getBtnSortCountry())
+		else if(e.getSource()==view.getBtnSortCountry() || e.getSource()==view.getSortCountryMenu())
 		{
 			model.sortBy("country");
 			//set sorted flag
@@ -159,7 +162,7 @@ public class Controller implements ActionListener, ChangeListener {
 			//check refresh button visibility
 			checkButtonVisible();
 		}//sort records by date
-		else if(e.getSource()==view.getBtnSortDate())
+		else if(e.getSource()==view.getBtnSortDate() || e.getSource()==view.getSortDateMenu())
 		{
 			model.sortBy("date");
 			//set sorted flag
@@ -167,7 +170,7 @@ public class Controller implements ActionListener, ChangeListener {
 			//check refresh button visibility
 			checkButtonVisible();
 		}//sort records by email
-		else if(e.getSource()==view.getBtnSortEmail())
+		else if(e.getSource()==view.getBtnSortEmail() || e.getSource()==view.getSortEmailMenu())
 		{
 			model.sortBy("email");
 			//set sorted flag
@@ -183,7 +186,7 @@ public class Controller implements ActionListener, ChangeListener {
 			//check refresh button visibility
 			checkButtonVisible();
 		}//sort records by name
-		else if(e.getSource()==view.getBtnSortName())
+		else if(e.getSource()==view.getBtnSortName() || e.getSource()==view.getSortNameMenu())
 		{
 			model.sortBy("name");
 			//set sorted flag
@@ -191,7 +194,7 @@ public class Controller implements ActionListener, ChangeListener {
 			//check refresh button visibility
 			checkButtonVisible();
 		}//sort records by price
-		else if(e.getSource()==view.getBtnSortPrice())
+		else if(e.getSource()==view.getBtnSortPrice() || e.getSource()==view.getSortPriceMenu())
 		{
 			model.sortBy("price");
 			//set sorted flag
@@ -199,7 +202,13 @@ public class Controller implements ActionListener, ChangeListener {
 			//check refresh button visibility
 			checkButtonVisible();
 			//checkButtonsEnabled();
-		}//show records in original order
+	
+		}//show about dialog
+		else if(e.getSource()==view.getAboutMenu()){
+			aboutDialog = new AboutWindow();
+			aboutDialog.setVisible(true);
+		}
+		//show records in original order
 		else if(e.getSource()==view.getBtnReset())
 		{
 			model.showOriginal();
@@ -264,17 +273,6 @@ public class Controller implements ActionListener, ChangeListener {
 		//set sorted flag
 		sorted = true;
 
-		//view.getModel2().setSelected(true);
-	/*	Date d = view.getModel2().getValue();
-		
-	    SimpleDateFormat df = new SimpleDateFormat("yyyy");
-	    String date = df.format(d);
-		try {
-			view.getModel2().setValue(df.parse(date));
-		} catch (ParseException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}*/
 		}
 		//month and year changed
 		else if(e.getSource()==view.getModel())
@@ -353,57 +351,5 @@ public class Controller implements ActionListener, ChangeListener {
 				
 		
 	}
-	/**
-	 * class to manage printing 
-	 * @author Win8
-	 *
-	 */
-	/*class PrintReport implements Printable {
-		private Component print_component;
-		 
-	    public static void printComponent(Component c) {
-	        new PrintReport(c).doPrint();
-	    }
-	 
-	    public PrintReport(Component comp) {
-	        this.print_component = comp;
-	    }
-	 
-	    public void doPrint() {
-	        PrinterJob printJob = PrinterJob.getPrinterJob();
-	        printJob.setPrintable(this);
-	        if (printJob.printDialog()) {
-	            try {
-	                printJob.print();
-	            } catch (PrinterException pe) {
-	                System.out.println("Error printing: " + pe);
-	            }
-	        }
-	    }
-	 
-	    @Override
-	    public int print(Graphics g, PageFormat pageFormat, int pageIndex) {
-	        if (pageIndex > 0) {
-	            return (NO_SUCH_PAGE);
-	        } else {
-	            Graphics2D g2d = (Graphics2D) g;
-	            g2d.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
-	            disableDoubleBuffering(print_component);
-	            print_component.paint(g2d);
-	            enableDoubleBuffering(print_component);
-	            return (PAGE_EXISTS);
-	        }
-	    }
-	 
-	    public static void disableDoubleBuffering(Component c) {
-	        RepaintManager currentManager = RepaintManager.currentManager(c);
-	        currentManager.setDoubleBufferingEnabled(false);
-	    }
-	 
-	    public static void enableDoubleBuffering(Component c) {
-	        RepaintManager currentManager = RepaintManager.currentManager(c);
-	        currentManager.setDoubleBufferingEnabled(true);
-	    }
-	} */
-
+	
 }

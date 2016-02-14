@@ -2,6 +2,7 @@ import controller.Controller;
 import model.Customer;
 import model.CustomerManager;
 import model.Model;
+import view.AboutWindow;
 import view.MainWindow;
 import view.PrintWindow;
 import view.RecordsWindow;
@@ -12,7 +13,7 @@ public class Application {
 
 	public static void main(String[] args) {
 		
-		//PrintWindow print = new PrintWindow();
+		//AboutWindow print = new AboutWindow();
 		
 		//initialise main window
 		MainWindow main = new MainWindow();

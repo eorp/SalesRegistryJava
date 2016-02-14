@@ -150,6 +150,7 @@ public class Model extends Observable {
 		List<Customer> copy = manager.getList();
 		switch(byTime)
 		{
+		case 0: copy = manager.getList();break;
 		case 1: copy = copySortedByMonth; break;
 		case 2: copy = copySortedByYear; break;
 		}
@@ -413,13 +414,13 @@ public class Model extends Observable {
 	//sort records by certain parameter
 	public void sortBy(String value)
 	{
-		List<Customer> copySorted = null;
-		switch(sortedByTime)
+		List<Customer> copySorted = customerList(sortedByTime);
+		/*switch(sortedByTime)
 		{
 		case 0:copySorted = manager.getList();break;
 		case 1: copySorted = copySortedByMonth; break;
 		case 2: copySorted = copySortedByYear; break;
-		}
+		}*/
 		switch(value)
 		{
 		case "name": copySorted.sort(Comparator.comparing((Customer c) -> c.getLastName()).thenComparing((Customer c)->c.getFirstName()));
@@ -449,10 +450,12 @@ public class Model extends Observable {
 	public void showOriginal()
 	{//set sorting value to unsorted
 		sortedByTime = 0;
+		List<Customer> copySorted = manager.getList();
+		
 		// call setChanged before notifyObservers to indicate model has changed
 	      setChanged();     
 	   // notify Observers that model has changed 
-	      notifyObservers(manager.toStringArray());
+	      notifyObservers(manager.getSortedData(copySorted,0));
 		  getTotals(manager.getList());
 		 // System.out.println("show original "+Arrays.toString(manager.toStringArray()));
 	}
